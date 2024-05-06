@@ -1,6 +1,8 @@
 import { Request, Response } from "express";
 import errorWrapper from "../middlewares/errorWrapper";
 import CustomError from "../services/CustomError";
+import { sendMail } from "../services/mailService";
+import { generateRandomPassword } from "../services/utils";
 import {
     generateToken,
     getToken,
@@ -62,12 +64,39 @@ const createUser = errorWrapper(
   );
   
 
+  const createUserWithMailSend = errorWrapper(
+    async (req: Request, res: Response) => {
+      const { regno, session, email,  role } = req.body;
+      const password = generateRandomPassword(8);
+      const hashedPassword = await bcrypt.hash(password, 10);
+
+      const { rows } = await pool.query(
+        'INSERT INTO Users (regno, session, email, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+        [regno, session, email,  hashedPassword, role]
+    );
+
+    sendMail(
+      regno,
+      email,
+      `Welcome To SWE Society!`,
+      `Your account has been created by Admin! Here are the Credentials:`,
+      `regno: ${regno}<br>email: ${email}<br> password: ${password}<br><br>Regards,<br>SWE Society Committee`
+    );
+
+  
+     
+      res.status(201).json(rows[0]);
+    },
+    { statusCode: 500, message: `Couldn't create user` }
+  );
+
 
 
 
   export {
     createUser,
     login,
+    createUserWithMailSend
 
   };
 

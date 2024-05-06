@@ -11,7 +11,7 @@ import {
   router.route("/:userId").put(updateUser);
   router.route("/").get(getAllUsers);
   router.route("/:userId").get(getUserById);
-  router.route("/:userId").get(deleteUser);
+  router.route("/:userId").delete(deleteUser);
   
 
 

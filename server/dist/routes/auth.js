@@ -7,5 +7,6 @@ const express_1 = __importDefault(require("express"));
 const router = express_1.default.Router();
 const auth_1 = require("../controllers/auth");
 router.route("/create").post(auth_1.createUser);
+router.route("/createbymailing").post(auth_1.createUserWithMailSend);
 router.route("/login").post(auth_1.login);
 exports.default = router;

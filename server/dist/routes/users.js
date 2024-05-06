@@ -9,5 +9,5 @@ const users_1 = require("../controllers/users");
 router.route("/:userId").put(users_1.updateUser);
 router.route("/").get(users_1.getAllUsers);
 router.route("/:userId").get(users_1.getUserById);
-router.route("/:userId").get(users_1.deleteUser);
+router.route("/:userId").delete(users_1.deleteUser);
 exports.default = router;
