@@ -14,6 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dbconnect_1 = require("./db/dbconnect");
+const tables_1 = require("./db/tables");
 const PORT = 5050;
 const app = (0, express_1.default)();
 app.get("/", (req, res) => {
@@ -23,5 +24,6 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     // await connectToDB();
     yield (0, dbconnect_1.testDatabaseConnection)();
+    yield (0, tables_1.createTables)();
     console.log(`Server is running in ${PORT}`);
 }));
