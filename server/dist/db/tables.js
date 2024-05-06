@@ -19,12 +19,12 @@ function createTables() {
         try {
             yield dbconnect_1.default.query(`
         CREATE TABLE IF NOT EXISTS Users (
-            id SERIAL PRIMARY KEY,
+            userId SERIAL PRIMARY KEY,
             fullname VARCHAR(100),
             password VARCHAR(100) NOT NULL,
             email VARCHAR(100) UNIQUE NOT NULL,
             profile_picture VARCHAR(200),
-            regno VARCHAR(20),
+            regno VARCHAR(20) UNIQUE NOT NULL,
             session VARCHAR(10),
             phone_number VARCHAR(15),
             bio TEXT,
@@ -41,7 +41,20 @@ function createTables() {
             experience TEXT[],
             projects TEXT[],
             is_alumni BOOLEAN DEFAULT FALSE,
-            role VARCHAR(20) DEFAULT 'general_member'
+            role VARCHAR(20) NOT NULL DEFAULT 'general_member'
+        );
+
+        CREATE TABLE IF NOT EXISTS GeneralNotices (
+            noticeId SERIAL PRIMARY KEY,
+            notice_provider INT,
+            notice_date DATE,
+            expire_date DATE,
+            headline VARCHAR(200),
+            notice_body TEXT,
+            picture TEXT,
+            file TEXT,
+            FOREIGN KEY (notice_provider) REFERENCES Users(userId) ON DELETE CASCADE
+
         );
 
         `);
