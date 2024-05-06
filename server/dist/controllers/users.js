@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUsers = exports.updateUser = void 0;
+exports.deleteUser = exports.getUserById = exports.getAllUsers = exports.updateUser = void 0;
 const errorWrapper_1 = __importDefault(require("../middlewares/errorWrapper"));
 const CustomError_1 = __importDefault(require("../services/CustomError"));
 const dbconnect_1 = __importDefault(require("../db/dbconnect"));
@@ -54,5 +54,23 @@ exports.updateUser = updateUser;
 const getAllUsers = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { rows } = yield dbconnect_1.default.query('SELECT * FROM Users');
     res.json(rows);
-}), { statusCode: 500, message: `Couldn't get notices` });
+}), { statusCode: 500, message: `Couldn't get Users` });
 exports.getAllUsers = getAllUsers;
+const getUserById = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const { rows } = yield dbconnect_1.default.query('SELECT * FROM Users WHERE userId = $1', [userId]);
+    if (rows.length === 0) {
+        throw new CustomError_1.default('User not found', 404);
+    }
+    res.json(rows[0]);
+}), { statusCode: 500, message: `Couldn't get User by UserId` });
+exports.getUserById = getUserById;
+const deleteUser = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const { rowCount } = yield dbconnect_1.default.query('DELETE FROM Users WHERE userId = $1', [userId]);
+    if (rowCount === 0) {
+        throw new CustomError_1.default('User not found', 404);
+    }
+    res.json({ message: 'User deleted successfully' });
+}), { statusCode: 500, message: `Couldn't delete User` });
+exports.deleteUser = deleteUser;

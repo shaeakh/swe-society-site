@@ -52,13 +52,43 @@ const updateUser = errorWrapper(
       const { rows } = await pool.query('SELECT * FROM Users');
       res.json(rows);
     },
-    { statusCode: 500, message: `Couldn't get notices` }
+    { statusCode: 500, message: `Couldn't get Users` }
+  );
+
+  const getUserById = errorWrapper(
+    async (req: Request, res: Response) => {
+      const { userId } = req.params;
+      const { rows } = await pool.query('SELECT * FROM Users WHERE userId = $1', [userId]);
+      
+      if (rows.length === 0) {
+        throw new CustomError('User not found', 404 );
+      }
+  
+      res.json(rows[0]);
+    },
+    { statusCode: 500, message: `Couldn't get User by UserId` }
+  );
+
+  const deleteUser = errorWrapper(
+    async (req: Request, res: Response) => {
+      const { userId } = req.params;
+      const { rowCount } = await pool.query('DELETE FROM Users WHERE userId = $1', [userId]);
+  
+      if (rowCount === 0) {
+        throw new CustomError('User not found', 404 );
+      }
+  
+      res.json({ message: 'User deleted successfully' });
+    },
+    { statusCode: 500, message: `Couldn't delete User` }
   );
 
   
   export {
     updateUser,
-    getAllUsers
+    getAllUsers,
+    getUserById,
+    deleteUser
   };
 
 
