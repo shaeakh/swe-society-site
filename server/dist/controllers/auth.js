@@ -12,9 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.createUser = void 0;
+exports.createUserWithMailSend = exports.login = exports.createUser = void 0;
 const errorWrapper_1 = __importDefault(require("../middlewares/errorWrapper"));
 const CustomError_1 = __importDefault(require("../services/CustomError"));
+const mailService_1 = require("../services/mailService");
+const utils_1 = require("../services/utils");
 const Token_1 = require("../services/Token");
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const dbconnect_1 = __importDefault(require("../db/dbconnect"));
@@ -46,3 +48,12 @@ const login = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0
     }
 }), { statusCode: 500, message: `Login Failed` });
 exports.login = login;
+const createUserWithMailSend = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { regno, session, email, role } = req.body;
+    const password = (0, utils_1.generateRandomPassword)(8);
+    const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+    const { rows } = yield dbconnect_1.default.query('INSERT INTO Users (regno, session, email, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING *', [regno, session, email, hashedPassword, role]);
+    (0, mailService_1.sendMail)(regno, email, `Welcome To SWE Society!`, `Your account has been created by Admin! Here are the Credentials:`, `regno: ${regno}<br>email: ${email}<br> password: ${password}<br><br>Regards,<br>SWE Society Committee`);
+    res.status(201).json(rows[0]);
+}), { statusCode: 500, message: `Couldn't create user` });
+exports.createUserWithMailSend = createUserWithMailSend;
