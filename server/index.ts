@@ -2,6 +2,7 @@ import express , { Express, Request, Response } from "express";
 import pool, {testDatabaseConnection, connectToDB} from "./db/dbconnect";
 import { createTables } from "./db/tables";
 import authRoute from "./routes/auth";
+import userRoute from "./routes/users";
 import noticeRoute from "./routes/generalNotice";
 import cors from "cors";
 
@@ -24,6 +25,7 @@ app.get("/",(req,res)=>{
 });
 app.use("/auth", authRoute);
 app.use("/notice", noticeRoute);
+app.use("/users", userRoute);
 
 
 

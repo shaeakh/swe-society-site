@@ -38,8 +38,6 @@ const login = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0
         if (!isPasswordValid) {
             throw new Error("Invalid email or password");
         }
-        // console.log(roles);
-        // console.log(user.roleName);
         const token = (0, Token_1.generateToken)({
             id: rows[0].id,
             role: rows[0].role,

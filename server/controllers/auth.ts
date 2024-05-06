@@ -45,10 +45,6 @@ const createUser = errorWrapper(
             throw new Error("Invalid email or password");
           }
       
-      
-          // console.log(roles);
-          // console.log(user.roleName);
-      
           const token = generateToken(
             {
               id: rows[0].id,
@@ -67,9 +63,12 @@ const createUser = errorWrapper(
   
 
 
+
+
   export {
     createUser,
-    login
+    login,
+
   };
 
 
