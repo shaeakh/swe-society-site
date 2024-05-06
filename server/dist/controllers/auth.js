@@ -12,26 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const dbconnect_1 = require("./db/dbconnect");
-const tables_1 = require("./db/tables");
-const auth_1 = __importDefault(require("./routes/auth"));
-const cors_1 = __importDefault(require("cors"));
-const PORT = 5050;
-const app = (0, express_1.default)();
-app.use(express_1.default.json());
-app.use((0, cors_1.default)({
-    origin: "http://localhost:3000",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-}));
-app.get("/", (req, res) => {
-    res.send("Swe society starting");
-});
-app.use("/auth", auth_1.default);
-app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
-    // await connectToDB();
-    yield (0, dbconnect_1.testDatabaseConnection)();
-    yield (0, tables_1.createTables)();
-    console.log(`Server is running in ${PORT}`);
-}));
+exports.createUser = void 0;
+const errorWrapper_1 = __importDefault(require("../middlewares/errorWrapper"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const dbconnect_1 = __importDefault(require("../db/dbconnect"));
+const createUser = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log("hi boss");
+    const { regno, session, email, password, role } = req.body;
+    const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+    const { rows } = yield dbconnect_1.default.query('INSERT INTO Users (regno, session, email, password, role) VALUES ($1, $2, $3, $4, $5) RETURNING *', [regno, session, email, hashedPassword, role]);
+    res.status(201).json(rows[0]);
+}), { statusCode: 500, message: `Couldn't create user` });
+exports.createUser = createUser;

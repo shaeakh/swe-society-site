@@ -1,15 +1,27 @@
 import express , { Express, Request, Response } from "express";
 import pool, {testDatabaseConnection, connectToDB} from "./db/dbconnect";
 import { createTables } from "./db/tables";
+import authRoute from "./routes/auth";
+import cors from "cors";
+
+
+
 const PORT = 5050;
 
 const app = express();
+app.use(express.json());
+app.use(
+    cors({
+      origin: "http://localhost:3000",
+      credentials: true,
+      methods: ["GET", "POST", "PUT", "DELETE"],
+    })
+  );
 
 app.get("/",(req,res)=>{
     res.send("Swe society starting");
 });
-
-// Endpoint to test database connection
+app.use("/auth", authRoute);
 
 
 

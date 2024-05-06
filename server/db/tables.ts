@@ -9,7 +9,7 @@ export async function createTables() {
             password VARCHAR(100) NOT NULL,
             email VARCHAR(100) UNIQUE NOT NULL,
             profile_picture VARCHAR(200),
-            regno VARCHAR(20),
+            regno VARCHAR(20) UNIQUE NOT NULL,
             session VARCHAR(10),
             phone_number VARCHAR(15),
             bio TEXT,
@@ -26,7 +26,7 @@ export async function createTables() {
             experience TEXT[],
             projects TEXT[],
             is_alumni BOOLEAN DEFAULT FALSE,
-            role VARCHAR(20) DEFAULT 'general_member'
+            role VARCHAR(20) NOT NULL DEFAULT 'general_member'
         );
 
         `);
