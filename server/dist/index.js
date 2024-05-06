@@ -16,6 +16,7 @@ const express_1 = __importDefault(require("express"));
 const dbconnect_1 = require("./db/dbconnect");
 const tables_1 = require("./db/tables");
 const auth_1 = __importDefault(require("./routes/auth"));
+const generalNotice_1 = __importDefault(require("./routes/generalNotice"));
 const cors_1 = __importDefault(require("cors"));
 const PORT = 5050;
 const app = (0, express_1.default)();
@@ -29,6 +30,7 @@ app.get("/", (req, res) => {
     res.send("Swe society starting");
 });
 app.use("/auth", auth_1.default);
+app.use("/notice", generalNotice_1.default);
 app.listen(PORT, () => __awaiter(void 0, void 0, void 0, function* () {
     // await connectToDB();
     yield (0, dbconnect_1.testDatabaseConnection)();

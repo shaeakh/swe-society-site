@@ -4,7 +4,7 @@ export async function createTables() {
     try {
         await pool.query(`
         CREATE TABLE IF NOT EXISTS Users (
-            id SERIAL PRIMARY KEY,
+            userId SERIAL PRIMARY KEY,
             fullname VARCHAR(100),
             password VARCHAR(100) NOT NULL,
             email VARCHAR(100) UNIQUE NOT NULL,
@@ -30,7 +30,7 @@ export async function createTables() {
         );
 
         CREATE TABLE IF NOT EXISTS GeneralNotices (
-            id SERIAL PRIMARY KEY,
+            noticeId SERIAL PRIMARY KEY,
             notice_provider INT,
             notice_date DATE,
             expire_date DATE,
@@ -38,7 +38,7 @@ export async function createTables() {
             notice_body TEXT,
             picture TEXT,
             file TEXT,
-            FOREIGN KEY (notice_provider) REFERENCES Users(id) ON DELETE CASCADE
+            FOREIGN KEY (notice_provider) REFERENCES Users(userId) ON DELETE CASCADE
 
         );
 

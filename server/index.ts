@@ -2,6 +2,7 @@ import express , { Express, Request, Response } from "express";
 import pool, {testDatabaseConnection, connectToDB} from "./db/dbconnect";
 import { createTables } from "./db/tables";
 import authRoute from "./routes/auth";
+import noticeRoute from "./routes/generalNotice";
 import cors from "cors";
 
 
@@ -22,6 +23,7 @@ app.get("/",(req,res)=>{
     res.send("Swe society starting");
 });
 app.use("/auth", authRoute);
+app.use("/notice", noticeRoute);
 
 
 
