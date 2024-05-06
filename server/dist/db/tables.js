@@ -44,6 +44,19 @@ function createTables() {
             role VARCHAR(20) NOT NULL DEFAULT 'general_member'
         );
 
+        CREATE TABLE IF NOT EXISTS GeneralNotices (
+            id SERIAL PRIMARY KEY,
+            notice_provider INT,
+            notice_date DATE,
+            expire_date DATE,
+            headline VARCHAR(200),
+            notice_body TEXT,
+            picture TEXT,
+            file TEXT,
+            FOREIGN KEY (notice_provider) REFERENCES Users(id) ON DELETE CASCADE
+
+        );
+
         `);
             console.log('Tables created successfully');
         }
