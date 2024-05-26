@@ -11,20 +11,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectToDB = exports.testDatabaseConnection = void 0;
 const pg_1 = require("pg");
-const connectionString = 'postgresql://mypostgres:iictSUST1060@society-db-1.cpsw4s4as3ri.us-east-1.rds.amazonaws.com:5432/societysite';
+const connectionString = 'postgres://postgres.bhfbufaieuwjkepaoynk:sweSOCIETY$$123@aws-0-ap-south-1.pooler.supabase.com:5432/postgres';
 const pool = new pg_1.Pool({
-    // user: "mypostgres",
-    // password: "iictSUST1060",
-    // host: "society-db-1.cpsw4s4as3ri.us-east-1.rds.amazonaws.com",
-    // port: 5432,
-    // database: "societysite"
-    user: "postgres",
-    password: "postgres",
-    host: "localhost",
-    port: 5432,
-    database: "societysite"
-});
-const client = new pg_1.Client({
     connectionString: connectionString
 });
 function testDatabaseConnection() {
@@ -42,14 +30,13 @@ exports.testDatabaseConnection = testDatabaseConnection;
 function connectToDB() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            yield client.connect();
+            yield pool.connect();
             console.log('Connected to PostgreSQL database');
         }
         catch (error) {
-            console.error('Error connecting to PostgreSQL database:');
+            console.error('Error connecting to PostgreSQL database:', error);
         }
     });
 }
 exports.connectToDB = connectToDB;
 exports.default = pool;
-//psql -h society-db-1.cpsw4s4as3ri.us-east-1.rds.amazonaws.com -U mypostgres -d societysite -p 5432
