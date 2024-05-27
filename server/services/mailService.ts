@@ -2,7 +2,7 @@ import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
 
 const MAIL_EMAIL = "sustsoftwaresociety@gmail.com";
-const MAIL_PASSWORD = "bpjuasvenobnvnka";
+const MAIL_PASSWORD = "edqfadabdcovrone";
 
 const sendMail = async (
     regno: string,

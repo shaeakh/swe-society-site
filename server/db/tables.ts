@@ -42,9 +42,23 @@ export async function createTables() {
 
         );
 
+        CREATE TABLE IF NOT EXISTS Events (
+            eventid SERIAL PRIMARY KEY,
+            event_creator INT,
+            start_time TIMESTAMP,
+            end_time TIMESTAMP,
+            headline VARCHAR(200),
+            event_details TEXT,
+            coverphoto TEXT,
+            created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (event_creator) REFERENCES Users(userId) ON DELETE SET NULL
+        );
+
         `);
         console.log('Tables created successfully');
     } catch (error) {
         console.error('Unable to create any table:', error);
     }
 }
+
+//Deployment note: User(userid) On delete null hobe.

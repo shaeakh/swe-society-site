@@ -16,7 +16,7 @@ exports.sendMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const mailgen_1 = __importDefault(require("mailgen"));
 const MAIL_EMAIL = "sustsoftwaresociety@gmail.com";
-const MAIL_PASSWORD = "bpjuasvenobnvnka";
+const MAIL_PASSWORD = "edqfadabdcovrone";
 const sendMail = (regno, email, subject, introMessage, outroMessage) => __awaiter(void 0, void 0, void 0, function* () {
     let config = {
         service: "gmail",
