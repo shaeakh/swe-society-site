@@ -28,7 +28,7 @@ const sendMail = async (
       theme: "default",
       product: {
         name: "SUST SWE Society",
-        link: "https://definecoder.github.io/",
+        link: "https://www.facebook.com/swesocietysust",
       },
     });
   

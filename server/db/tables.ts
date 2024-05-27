@@ -54,6 +54,15 @@ export async function createTables() {
             FOREIGN KEY (event_creator) REFERENCES Users(userId) ON DELETE SET NULL
         );
 
+        CREATE TABLE IF NOT EXISTS Event_Updates (
+            event_updateid SERIAL PRIMARY KEY,
+            eventid INT,
+            caption TEXT,
+            photos TEXT[],
+            created_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (eventid) REFERENCES Events(eventid) ON DELETE SET NULL
+        );
+
         `);
         console.log('Tables created successfully');
     } catch (error) {
