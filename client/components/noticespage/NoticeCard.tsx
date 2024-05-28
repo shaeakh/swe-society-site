@@ -1,5 +1,12 @@
-function NoticeCard() {
-  return <div>This is single notice card.</div>;
+
+import React from 'react'
+
+const NoticeCard = () => {
+  return (
+    <div>
+      notice
+    </div>
+  )
 }
 
-export default NoticeCard;
+export default NoticeCard
