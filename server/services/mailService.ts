@@ -1,8 +1,10 @@
 import nodemailer from "nodemailer";
 import Mailgen from "mailgen";
+import dotenv from "dotenv";
+dotenv.config();
 
-const MAIL_EMAIL = "sustsoftwaresociety@gmail.com";
-const MAIL_PASSWORD = "bpjuasvenobnvnka";
+const MAIL_EMAIL = process.env.MAIL_EMAIL;
+const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 
 const sendMail = async (
     regno: string,
@@ -26,7 +28,7 @@ const sendMail = async (
       theme: "default",
       product: {
         name: "SUST SWE Society",
-        link: "https://definecoder.github.io/",
+        link: "https://www.facebook.com/swesocietysust",
       },
     });
   

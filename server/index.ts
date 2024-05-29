@@ -4,6 +4,8 @@ import { createTables } from "./db/tables";
 import authRoute from "./routes/auth";
 import userRoute from "./routes/users";
 import noticeRoute from "./routes/generalNotice";
+import eventRoute from "./routes/events";
+import eventUpdateRoute from "./routes/eventUpdate";
 import cors from "cors";
 
 
@@ -26,6 +28,8 @@ app.get("/",(req,res)=>{
 app.use("/auth", authRoute);
 app.use("/notice", noticeRoute);
 app.use("/users", userRoute);
+app.use("/event", eventRoute);
+app.use("/eventupdate", eventUpdateRoute);
 
 
 

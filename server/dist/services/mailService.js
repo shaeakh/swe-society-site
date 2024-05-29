@@ -15,8 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMail = void 0;
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const mailgen_1 = __importDefault(require("mailgen"));
-const MAIL_EMAIL = "sustsoftwaresociety@gmail.com";
-const MAIL_PASSWORD = "bpjuasvenobnvnka";
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
+const MAIL_EMAIL = process.env.MAIL_EMAIL;
+const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 const sendMail = (regno, email, subject, introMessage, outroMessage) => __awaiter(void 0, void 0, void 0, function* () {
     let config = {
         service: "gmail",
@@ -30,7 +32,7 @@ const sendMail = (regno, email, subject, introMessage, outroMessage) => __awaite
         theme: "default",
         product: {
             name: "SUST SWE Society",
-            link: "https://definecoder.github.io/",
+            link: "https://www.facebook.com/swesocietysust",
         },
     });
     let response = {
