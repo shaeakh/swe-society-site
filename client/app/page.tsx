@@ -1,3 +1,4 @@
+import {Footer} from "@/components/global/Footer";
 import Navbar from "@/components/global/Navbar";
 import AchievementSection from "@/components/homepage/AchievementSection";
 import BlogSection from "@/components/homepage/BlogSection";
@@ -21,6 +22,7 @@ export default function Home() {
       <AchievementSection />
       <ECMemberCarousel />
       <GallerySection />
+      <Footer/>
     </main>
   );
 }
