@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserWithMailSend = exports.login = exports.createUser = void 0;
+exports.updateUserPassword = exports.createMultiUsersWithMailSend = exports.createUserWithMailSend = exports.login = exports.createUser = void 0;
 const errorWrapper_1 = __importDefault(require("../middlewares/errorWrapper"));
 const CustomError_1 = __importDefault(require("../services/CustomError"));
 const mailService_1 = require("../services/mailService");
@@ -57,3 +57,68 @@ const createUserWithMailSend = (0, errorWrapper_1.default)((req, res) => __await
     res.status(201).json(rows[0]);
 }), { statusCode: 500, message: `Couldn't create user` });
 exports.createUserWithMailSend = createUserWithMailSend;
+const createMultiUsersWithMailSend = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const users = req.body;
+    const failedUsers = [];
+    for (const user of users) {
+        const { regno, session, email } = user;
+        // Check if registration number or email already exists
+        const regnoExists = yield dbconnect_1.default.query('SELECT 1 FROM Users WHERE regno = $1', [regno]);
+        const emailExists = yield dbconnect_1.default.query('SELECT 1 FROM Users WHERE email = $1', [email]);
+        if (regnoExists.rows.length > 0) {
+            failedUsers.push({ regno, email, message: 'Registration number already exists' });
+            continue;
+        }
+        if (emailExists.rows.length > 0) {
+            failedUsers.push({ regno, email, message: 'Email address already exists' });
+            continue;
+        }
+        const password = (0, utils_1.generateRandomPassword)(8);
+        const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+        try {
+            const { rows } = yield dbconnect_1.default.query('INSERT INTO Users (regno, session, email, password) VALUES ($1, $2, $3, $4) RETURNING *', [regno, session, email, hashedPassword]);
+            (0, mailService_1.sendMail)(regno, email, `Welcome To SWE Society!`, `Your account has been created by Admin! Here are the Credentials:`, `regno: ${regno}<br>email: ${email}<br>password: ${password}<br><br>Regards,<br>SWE Society Committee`);
+        }
+        catch (error) {
+            console.error(`Failed to create user with regno ${regno}:`, error);
+            failedUsers.push({ regno, email, message: 'Failed to create user' });
+        }
+    }
+    if (failedUsers.length > 0) {
+        res.status(207).json({
+            message: 'Some users could not be created',
+            failedUsers,
+        });
+    }
+    else {
+        res.status(201).json({
+            message: 'All users created successfully',
+        });
+    }
+}), { statusCode: 500, message: `Couldn't create users` });
+exports.createMultiUsersWithMailSend = createMultiUsersWithMailSend;
+const updateUserPassword = (0, errorWrapper_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userid } = req.body;
+    try {
+        // Find user details by userid
+        const userResult = yield dbconnect_1.default.query('SELECT regno, email FROM Users WHERE userid = $1', [userid]);
+        if (userResult.rows.length === 0) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const { regno, email } = userResult.rows[0];
+        // Generate a new password
+        const newPassword = (0, utils_1.generateRandomPassword)(8);
+        const hashedPassword = yield bcrypt_1.default.hash(newPassword, 10);
+        // Update the user's password in the database
+        yield dbconnect_1.default.query('UPDATE Users SET password = $1 WHERE userid = $2 RETURNING *', [hashedPassword, userid]);
+        // Send email with the new credentials
+        (0, mailService_1.sendMail)(regno, email, `Your Password Has Been Updated`, `Your password has been updated by Admin. Here are your new credentials:`, `regno: ${regno}<br>email: ${email}<br>password: ${newPassword}<br><br>Regards,<br>SWE Society Committee`);
+        // Return the userid in the response
+        res.status(200).json({ userid });
+    }
+    catch (error) {
+        console.error(`Failed to update password for userid ${userid}:`, error);
+        res.status(500).json({ message: `Couldn't update user's password` });
+    }
+}), { statusCode: 500, message: `Couldn't update user's password` });
+exports.updateUserPassword = updateUserPassword;
