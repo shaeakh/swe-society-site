@@ -1,9 +1,15 @@
-function page() {
-  return (
-    <div>
-      <h1>Dashboard Page</h1>
-    </div>
-  );
-}
+"use client";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 
-export default page;
+const Dashboard = () => {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace("/dashboard/profile");
+  }, [router]);
+
+  return null;
+};
+
+export default Dashboard;
